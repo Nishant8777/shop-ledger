@@ -2,6 +2,7 @@ export interface LedgerEntry {
   date: string;
 
   openingBalance: number;
+  openingStock: number;
 
   cashSales: number;
   upiSales: number;
@@ -16,4 +17,5 @@ export interface LedgerEntry {
 
   profitLoss: number;
   closingCash: number;
+  
 }

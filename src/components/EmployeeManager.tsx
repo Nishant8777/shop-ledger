@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface Employee {
   name: string;
@@ -10,18 +10,15 @@ interface Employee {
   salary: number;
 }
 
-export default function EmployeeManager() {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+export default function EmployeeManager({
+  employees,
+  setEmployees,
+}: {
+  employees: Employee[];
+  setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
+}) {
+
   const [form, setForm] = useState<any>({});
-
-  useEffect(() => {
-    const data = localStorage.getItem("employees");
-    if (data) setEmployees(JSON.parse(data));
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("employees", JSON.stringify(employees));
-  }, [employees]);
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -33,6 +30,7 @@ export default function EmployeeManager() {
   };
 
   const saveEmployee = () => {
+
     if (!form.name || !form.date) {
       alert("Enter employee name and date");
       return;
@@ -49,6 +47,7 @@ export default function EmployeeManager() {
     };
 
     setEmployees([...employees, newEmployee]);
+
     setForm({});
   };
 
@@ -145,11 +144,17 @@ export default function EmployeeManager() {
           }}
         >
           <strong>{emp.name}</strong>
+
           <p>Date: {emp.date}</p>
+
           <p>Daily Salary: ₹{emp.dailySalary}</p>
+
           <p>Advance: ₹{emp.advance}</p>
+
           <p>Penalty: ₹{emp.penalty}</p>
+
           <p>Rating: {emp.rating}/10</p>
+
           <p>
             <strong>Salary: ₹{emp.salary}</strong>
           </p>

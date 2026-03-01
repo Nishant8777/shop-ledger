@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { LedgerEntry } from "../types/LedgerEntry";
-import { getLedgerData, saveLedgerData } from "../utils/storage";
 import { exportToExcel } from "../utils/exportExcel";
 import SummaryCard from "../components/SummaryCard";
 import HistoryList from "../components/HistoryList";
@@ -15,17 +14,14 @@ function Section({ title, children }: any) {
   );
 }
 
-export default function LedgerPage() {
-  const [entries, setEntries] = useState<LedgerEntry[]>([]);
+export default function LedgerPage({
+  entries,
+  setEntries,
+}: {
+  entries: LedgerEntry[];
+  setEntries: React.Dispatch<React.SetStateAction<LedgerEntry[]>>;
+}) {
   const [form, setForm] = useState<any>({});
-
-  useEffect(() => {
-    setEntries(getLedgerData());
-  }, []);
-
-  useEffect(() => {
-    saveLedgerData(entries);
-  }, [entries]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,6 +31,8 @@ export default function LedgerPage() {
       [name]: name === "date" ? value : Number(value),
     });
   };
+
+  /* CALCULATIONS */
 
   const totalSales =
     (form.cashSales || 0) +
@@ -54,6 +52,8 @@ export default function LedgerPage() {
     (form.upiSales || 0) -
     totalExpenses;
 
+  /* SAVE ENTRY */
+
   const saveEntry = () => {
     if (!form.date) return alert("Please select date");
 
@@ -72,10 +72,14 @@ export default function LedgerPage() {
     setForm({});
   };
 
+  /* DELETE ENTRY */
+
   const deleteEntry = (date: string) => {
     const updated = entries.filter((entry) => entry.date !== date);
     setEntries(updated);
   };
+
+  /* STYLES */
 
   const input = {
     width: "100%",
@@ -106,6 +110,8 @@ export default function LedgerPage() {
         style={input}
       />
 
+      {/* OPENING */}
+
       <Section title="Opening">
         <input
           name="openingBalance"
@@ -114,7 +120,17 @@ export default function LedgerPage() {
           onChange={handleChange}
           style={input}
         />
+
+        <input
+          name="openingStock"
+          placeholder="Opening Stock Value"
+          value={form.openingStock || ""}
+          onChange={handleChange}
+          style={input}
+        />
       </Section>
+
+      {/* SALES */}
 
       <Section title="Sales">
         <input
@@ -142,6 +158,8 @@ export default function LedgerPage() {
         />
       </Section>
 
+      {/* EXPENSES */}
+
       <Section title="Expenses">
         <input
           name="personalExpense"
@@ -168,15 +186,21 @@ export default function LedgerPage() {
         />
       </Section>
 
+      {/* SUMMARY */}
+
       <SummaryCard
         totalSales={totalSales}
         profitLoss={profitLoss}
         closingCash={closingCash}
       />
 
+      {/* SAVE */}
+
       <button style={button} onClick={saveEntry}>
         Save Entry
       </button>
+
+      {/* EXPORT */}
 
       <button
         style={{ ...button, backgroundColor: "#16a34a" }}
@@ -184,6 +208,8 @@ export default function LedgerPage() {
       >
         Export Excel
       </button>
+
+      {/* HISTORY */}
 
       <HistoryList entries={entries} onDelete={deleteEntry} />
     </div>
