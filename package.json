@@ -1,0 +1,29 @@
+{
+  "name": "shop-ledger",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/file-saver": "^2.0.7",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.0-beta.13"
+  },
+  "overrides": {
+    "vite": "^8.0.0-beta.13"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.4",
+    "file-saver": "^2.0.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "vite-plugin-pwa": "^1.2.0",
+    "xlsx": "^0.18.5"
+  }
+}
